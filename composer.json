@@ -16,7 +16,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "MakinaCorpus\\DrupalTooling\\": "."
+            "MakinaCorpus\\DrupalTooling\\": "src"
         },
         "exclude-from-classmap": [
             "/src/Tests/"
