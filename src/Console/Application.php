@@ -130,6 +130,13 @@ class Application extends BaseApplication
         $this->setDrupalEnvOverrides();
         $this->loadDrupalIncludes();
 
+        // Before bootstrapping Drupal we need to fetch the current error
+        // handlers and set them back after bootstrap, in order to avoid Drupal
+        // overriding them
+        // AHAH ! https://stackoverflow.com/a/25169684
+        set_error_handler($errorHandler = set_error_handler('var_dump'));
+        set_exception_handler($exceptionHandler = set_exception_handler('var_dump'));
+
         switch ($level) {
 
             case self::DRUPAL_BOOTSTRAP_SETTINGS:
@@ -155,6 +162,9 @@ class Application extends BaseApplication
             default:
                 throw new \InvalidArgumentException("Invalid bootstrap level given");
         }
+
+        set_error_handler($errorHandler);
+        set_exception_handler($exceptionHandler);
     }
 
     /**
