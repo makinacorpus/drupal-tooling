@@ -1,5 +1,7 @@
 #!/usr/bin/env php
 <?php
+# Use this to profile:
+#   !/usr/bin/php -d xdebug.profiler_enable=1
 
 use MakinaCorpus\DrupalTooling\Console\Application;
 

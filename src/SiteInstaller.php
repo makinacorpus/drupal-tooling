@@ -99,21 +99,23 @@ class SiteInstaller
 
         $this->application->bootstrapDrupal(Application::DRUPAL_BOOTSTRAP_SETTINGS);
 
+        $root = $this->application->getDrupalRoot();
+
         // We do will need all of this
-        require_once DRUPAL_ROOT . '/includes/cache.inc';
-        require_once DRUPAL_ROOT . '/includes/database/database.inc';
-        require_once DRUPAL_ROOT . '/includes/common.inc';
-        require_once DRUPAL_ROOT . '/includes/entity.inc';
-        require_once DRUPAL_ROOT . '/includes/file.inc';
-        require_once DRUPAL_ROOT . '/includes/install.inc';
-        require_once DRUPAL_ROOT . '/includes/language.inc';
-        require_once DRUPAL_ROOT . '/includes/module.inc';
-        require_once DRUPAL_ROOT . '/includes/theme.inc';
-        require_once DRUPAL_ROOT . '/includes/unicode.inc';
-        require_once DRUPAL_ROOT . '/modules/system/system.install';
-        require_once DRUPAL_ROOT . '/modules/system/system.module';
-        require_once DRUPAL_ROOT . '/modules/user/user.install';
-        require_once DRUPAL_ROOT . '/modules/user/user.module';
+        require_once $root . '/includes/cache.inc';
+        require_once $root . '/includes/database/database.inc';
+        require_once $root . '/includes/common.inc';
+        require_once $root . '/includes/entity.inc';
+        require_once $root . '/includes/file.inc';
+        require_once $root . '/includes/install.inc';
+        require_once $root . '/includes/language.inc';
+        require_once $root . '/includes/module.inc';
+        require_once $root . '/includes/theme.inc';
+        require_once $root . '/includes/unicode.inc';
+        require_once $root . '/modules/system/system.install';
+        require_once $root . '/modules/system/system.module';
+        require_once $root . '/modules/user/user.install';
+        require_once $root . '/modules/user/user.module';
     }
 
     public function install($profile, OutputInterface $output)

@@ -12,6 +12,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class Application extends BaseApplication
 {
@@ -114,7 +116,7 @@ class Application extends BaseApplication
         $this->drupalRoot = DRUPAL_ROOT;
 
         // This is necessary, we need to change the working directory
-        chdir(DRUPAL_ROOT);
+        chdir($this->drupalRoot);
 
         require_once $bootstrapInc;
 
@@ -165,6 +167,66 @@ class Application extends BaseApplication
 
         set_error_handler($errorHandler);
         set_exception_handler($exceptionHandler);
+    }
+
+    /**
+     * Is there a kernel available ?
+     *
+     * Note: this is only possible if the sf_dic module is enabled
+     *
+     * @return boolean
+     */
+    public function hasKernel()
+    {
+        return class_exists('\Drupal');
+    }
+
+    /**
+     * Get the kernel
+     *
+     * Note: this is only possible if the sf_dic module is enabled
+     *
+     * @return HttpKernelInterface
+     */
+    public function getKernel()
+    {
+        if (!$this->hasKernel()) {
+            throw new \LogicException("The 'sf_dic' module must be enabled for having a container");
+        }
+
+        // Bootstrapping Drupal is mandatory for kernel to be up and modules
+        // to be able to drop bundles in there, so just do it
+        $this->bootstrapDrupal(self::DRUPAL_BOOTSTRAP_VARIABLE);
+
+        return \Drupal::_getKernel();
+    }
+
+    /**
+     * Is there a container available ?
+     *
+     * Note: this is only possible if the sf_dic module is enabled
+     *
+     * @return boolean
+     */
+    public function hasContainer()
+    {
+        return class_exists('\Drupal');
+    }
+
+    /**
+     * Get the container
+     *
+     * Note: this is only possible if the sf_dic module is enabled
+     *
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        if (!$this->hasContainer()) {
+            throw new \LogicException("The 'sf_dic' module must be enabled for having a container");
+        }
+
+        return $this->getKernel()->getContainer();
     }
 
     /**
@@ -240,22 +302,23 @@ class Application extends BaseApplication
         $this->add(new SiteInstallCommand());
         $this->add(new SiteStatusCommand());
 
-        /*
-        $this->kernel->boot();
+        if ($this->hasKernel()) {
 
-        $container = $this->kernel->getContainer();
+            $container = $this->getContainer();
 
-        foreach ($this->kernel->getBundles() as $bundle) {
-            if ($bundle instanceof Bundle) {
-                $bundle->registerCommands($this);
+            if (class_exists('Symfony\Component\Finder\Finder')) {
+                foreach ($this->getKernel()->getBundles() as $bundle) {
+                    if ($bundle instanceof Bundle) {
+                        $bundle->registerCommands($this);
+                    }
+                }
+            }
+
+            if ($container->hasParameter('console.command.ids')) {
+                foreach ($container->getParameter('console.command.ids') as $id) {
+                    $this->add($container->get($id));
+                }
             }
         }
-
-        if ($container->hasParameter('console.command.ids')) {
-            foreach ($container->getParameter('console.command.ids') as $id) {
-                $this->add($container->get($id));
-            }
-        }
-         */
     }
 }

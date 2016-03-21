@@ -75,7 +75,7 @@ EOT
         } else if ('registry' === $bin) {
 
             $this->drupalBootstrapVariable();
-            require_once DRUPAL_ROOT . '/includes/file.inc';
+            $this->getApplication()->getDrupalRoot() . '/includes/file.inc';
             registry_update();
 
             $io->success("Registry has been rebuilt");
