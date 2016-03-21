@@ -36,8 +36,8 @@
         "symfony/yaml" : "~2.8|~3.0"
     },
     "suggest" : {
-        "makinacorpus/drupal-sf-dic" : "For embeding the Symfony kernel into your Drupal 7 site"
-        "symfony/finder": "For potential bundles to be able to register commands",
+        "makinacorpus/drupal-sf-dic" : "For embeding the Symfony kernel into your Drupal 7 site",
+        "symfony/finder": "For potential bundles to be able to register commands"
     },
     "minimum-stability" : "dev"
 }
