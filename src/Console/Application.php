@@ -15,6 +15,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
+/**
+ * For what it worth, this implementation is supposedly API-compatible with the
+ * Symfony's FrameworkBundle one, allowing you to use fullstack bundles with
+ * the 'sf_dic' module and register commands with it.
+ */
 class Application extends BaseApplication
 {
     const DRUPAL_BOOTSTRAP_SETTINGS = 1;
