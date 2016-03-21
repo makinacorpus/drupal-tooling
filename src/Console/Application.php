@@ -155,7 +155,12 @@ class Application extends BaseApplication
                 break;
 
             case self::DRUPAL_BOOTSTRAP_VARIABLE:
-                drupal_bootstrap(DRUPAL_BOOTSTRAP_VARIABLES);
+                // @todo
+                // In fact we do need to bootstrap a bit higher since Drupal
+                // needs the hook_boot() for initialiazing a few other stuff.
+                // This mostly to workaround bugguy kernel creation from the
+                // 'sf_dic' module - god I need to rewrite this.
+                drupal_bootstrap(DRUPAL_BOOTSTRAP_PAGE_HEADER);
                 break;
 
             case self::DRUPAL_BOOTSTRAP_LANGUAGE:
