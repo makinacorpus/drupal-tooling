@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+use MakinaCorpus\DrupalTooling\Console\Application;
+
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Debug\Debug;
+
+set_time_limit(0);
+
+if (!ini_get('date.timezone')) {
+    ini_set('date.timezone', 'UTC');
+}
+
+/** @var Composer\Autoload\ClassLoader $loader */
+$loader = null;
+foreach ([
+    __DIR__ . '/vendor/autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../lib/vendor/autoload.php',
+    __DIR__ . '/../../autoload.php',
+] as $file) {
+    if (file_exists($file)) {
+        $loader = include_once $file;
+        break;
+    }
+}
+
+if (!$loader) {
+    fwrite(STDERR, 'Unable to find autoload file for bootstrap, did you run composer install ?' . PHP_EOL);
+    die(1);
+}
+
+$input = new ArgvInput();
+$env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
+$debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(array('--no-debug', '')) && $env !== 'prod';
+
+if ($debug) {
+    Debug::enable();
+}
+
+$application = new Application(__DIR__ . '/../www');
+$application->run($input);
