@@ -5,15 +5,16 @@ namespace MakinaCorpus\DrupalTooling\Console;
 use MakinaCorpus\DrupalTooling\Command\CacheClearCommand;
 use MakinaCorpus\DrupalTooling\Command\SiteInstallCommand;
 use MakinaCorpus\DrupalTooling\Command\SiteStatusCommand;
+use MakinaCorpus\DrupalTooling\Command\UserPasswordCommand;
 
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * For what it worth, this implementation is supposedly API-compatible with the
@@ -311,6 +312,7 @@ class Application extends BaseApplication
         $this->add(new CacheClearCommand());
         $this->add(new SiteInstallCommand());
         $this->add(new SiteStatusCommand());
+        $this->add(new UserPasswordCommand());
 
         if ($this->hasKernel()) {
 
